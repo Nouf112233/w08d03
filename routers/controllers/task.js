@@ -119,13 +119,45 @@ const getTaskById = (req, res) => {
       });
   };
 
-
-
-
-module.exports = { getTask,getTaskById,deleteAllTask,updateTask,createTask };
-
-
+  const deleteTaskById = (req, res) => {
+    const { userId, taskId } = req.body;
   
+    userModel
+      .findById({ _id: userId })
+      .then((result) => {
+        taskModel
+          .findOne({ _id: taskId, user: userId })
+          .then(async (result) => {
+            if (result) {
+              let doc = await taskModel.findOneAndUpdate(
+                { _id: taskId },
+                {
+                    isdeleted: true,
+                },
+                {
+                  new: true,
+                }
+              );
+  
+              res.status(200).json(doc);
+            } else res.status(400).send("user does not has this task");
+          })
+          .catch((err) => {
+            res.status(400).send("user does not has this task");
+          });
+      })
+      .catch((err) => {
+        res.status(400).json("User not found");
+      });
+  };
+
+
+
+
+module.exports = { getTask,getTaskById,deleteAllTask,updateTask,createTask,deleteTaskById };
+
+
+
 
   
   
