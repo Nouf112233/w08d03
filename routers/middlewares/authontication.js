@@ -6,14 +6,14 @@ const authontication=(req,res,next)=>{
     try{
         if(!req.header.authorization)
         {
-            return res.statuse(403).json({message:"forbiddin"})
+            return res.status(403).json({message:"forbiddin"})
         } 
         const token=req.header.authorization.split(" ")[1];
         const parsedToken=jwt.verify(token,secret);
         req.token=parsedToken;
         next();
     }catch(error){
-        res.statuse(403).json(error);
+        res.status(403).json(error);
     }
 
 }
