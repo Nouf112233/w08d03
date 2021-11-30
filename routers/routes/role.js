@@ -1,5 +1,5 @@
 const express = require("express");
-const { addRole, getRoles } = require("./../controlers/role");
+const { addRole, getRoles } = require("./../controllers/role");
 const roleRouter = express.Router();
 
 roleRouter.post("/", addRole);
