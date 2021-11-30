@@ -67,13 +67,35 @@ const getTaskById = (req, res) => {
       });
   };
 
-
-
-
-module.exports = { getTask,getTaskById,deleteAllTask };
-
-
+  const updateTask = (req, res) => {
+    const { userId, taskId, taskName } = req.body;
   
-
+    if (userId == undefined || taskId == undefined || taskName == undefined)
+      return res.status(400).send("some data are missing");
+    taskModel
+      .findOne({ _id: taskId, user: userId, isdeleted: false })
+      .then(async (result) => {
+        if (result) {
+          let doc = await taskModel.findOneAndUpdate(
+            { _id: taskId },
+            { name: taskName },
+            {
+              new: true,
+            }
+          );
   
+          res.status(200).json(doc);
+        } else res.status(400).send("user does not has this task");
+      })
+      .catch((err) => {
+        res.status(400).send("user does not has this task");
+      });
+  };
+
+
+
+
+module.exports = { getTask,getTaskById,deleteAllTask,updateTask };
+
+
   
