@@ -1,9 +1,10 @@
 const express = require("express");
-const {getTask,getTaskById } = require("./../controllers/task");
+const {getTask,getTaskById,deleteAllTask } = require("./../controllers/task");
 const taskRouter = express.Router();
 
 taskRouter.post("/tasks", getTask);
 taskRouter.post("/task", getTaskById);
+taskRouter.delete("/task", deleteAllTask);
 
 
 
