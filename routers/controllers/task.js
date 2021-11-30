@@ -92,10 +92,40 @@ const getTaskById = (req, res) => {
       });
   };
 
+  const createTask = (req, res) => {
+    const { name, user } = req.body;
+  
+    userModel
+      .findById({ _id: user })
+      .then((result) => {
+        if (result) {
+          const newTask = new taskModel({
+            name,
+            user,
+          });
+  
+          newTask
+            .save()
+            .then((result) => {
+              res.status(200).json(result);
+            })
+            .catch((err) => {
+              res.status(400).send(err);
+            });
+        } else res.status(400).json("User not found");
+      })
+      .catch((err) => {
+        res.status(400).json("User not found");
+      });
+  };
 
 
 
-module.exports = { getTask,getTaskById,deleteAllTask,updateTask };
+
+module.exports = { getTask,getTaskById,deleteAllTask,updateTask,createTask };
 
 
+  
+
+  
   
