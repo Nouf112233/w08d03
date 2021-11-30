@@ -15,4 +15,4 @@ const authorization=(req,res,next)=>{
         res.status(403).json(error);
     }
 }
-module.exports=authontication;
+module.exports=authorization;

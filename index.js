@@ -16,6 +16,9 @@ app.use("/role", roleRouter);
 const userRouter = require("./routers/routes/user");
 app.use(userRouter);
 
+const taskRouter = require("./routers/routes/task");
+app.use(taskRouter);
+
 const PORT = process.env.PORT || 4000;
 app.listen(PORT, () => {
   console.log(`server running on port ${PORT}`);

@@ -15,6 +15,7 @@ const register = async (req, res) => {
     email: savedEmail,
     password: savedPassword,
     role,
+   
   });
   newUser
     .save()
@@ -59,4 +60,20 @@ const login = (req, res) => {
     });
 };
 
-module.exports = { register, login };
+const getUsers=(req,res)=>{
+
+  userModel
+    .find({})
+    .then((result) => {
+        res.status(201).json(result);
+      
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+      
+    });
+  };
+
+
+
+module.exports = { register, login ,getUsers};
