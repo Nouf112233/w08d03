@@ -15,7 +15,6 @@ const register = async (req, res) => {
     email: savedEmail,
     password: savedPassword,
     role,
-   
   });
   newUser
     .save()
@@ -60,20 +59,30 @@ const login = (req, res) => {
     });
 };
 
-const getUsers=(req,res)=>{
-
+const getUsers = (req, res) => {
   userModel
     .find({})
     .then((result) => {
-        res.status(201).json(result);
-      
+      res.status(200).json(result);
     })
     .catch((err) => {
-        res.status(400).json(err);
-      
+      res.status(400).json(err);
     });
-  };
+};
+
+const deleteUser = (req, res) => {
+  const { _id } = req.params;
+
+  userModel
+    .findByIdAndUpdate(_id, { isdeleted: true })
+    .then(() => {
+      res.status(200).json({ message: "User has been deleted successfully" });
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+};
 
 
 
-module.exports = { register, login ,getUsers};
+module.exports = { register, login, getUsers, deleteUser };
