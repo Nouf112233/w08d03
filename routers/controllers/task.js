@@ -10,7 +10,7 @@ const getTask = (req, res) => {
     .find({ _id: id })
     .then((result) => {
       taskModel
-        .find({ user: id, isdeleted: false })
+        .find({$and: [{user: id}, {isdeleted: false}] })
         .then((result) => {
           if (result) res.status(200).json(result);
           else res.status(400).json("this user not has any tasks");
@@ -30,7 +30,7 @@ const getTaskById = (req, res) => {
       .findById({ _id: userId })
       .then((result) => {
         taskModel
-          .find({ _id: taskId, user: userId, isdeleted: false })
+          .find({$and: [{ _id: taskId},{ user: userId}, {isdeleted: false}] })
           .then((result) => {
             if (result) res.status(200).json(result);
             else res.status(400).send("user does not has this task");
@@ -50,7 +50,7 @@ const getTaskById = (req, res) => {
       .findById({ _id: id })
       .then((result) => {
         taskModel
-          .find({ user: id, isdeleted: false })
+          .find({$and:[ {user: id}, {isdeleted: false}] })
           .then(async (result) => {
             if (result) {
               let doc = await taskModel.updateMany({ user: id }, { isdeleted: true });
@@ -73,7 +73,7 @@ const getTaskById = (req, res) => {
     if (userId == undefined || taskId == undefined || taskName == undefined)
       return res.status(400).send("some data are missing");
     taskModel
-      .findOne({ _id: taskId, user: userId, isdeleted: false })
+      .findOne({$and: [ {_id: taskId}, {user: userId}, {isdeleted: false}] })
       .then(async (result) => {
         if (result) {
           let doc = await taskModel.findOneAndUpdate(
@@ -126,7 +126,7 @@ const getTaskById = (req, res) => {
       .findById({ _id: userId })
       .then((result) => {
         taskModel
-          .findOne({ _id: taskId, user: userId })
+          .findOne({$and: [{_id: taskId}, {user: userId}] })
           .then(async (result) => {
             if (result) {
               let doc = await taskModel.findOneAndUpdate(
