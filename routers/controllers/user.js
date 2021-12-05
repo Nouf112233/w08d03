@@ -40,6 +40,7 @@ const login = (req, res) => {
           if (hashedPass) {
             const payload = {
               role: result.role,
+              id:result._id
             };
             const options = { expiresIn: "60m" };
             const token = await jwt.sign(payload, secret, options);

@@ -1,163 +1,172 @@
-
 const taskModel = require("./../../db/models/task");
 const userModel = require("./../../db/models/user");
 
-
 const getTask = (req, res) => {
-  const { id } = req.body;
+  // const { userId } = req.body;
+  const tokenId=req.token.id;
 
-  userModel
-    .find({ _id: id })
+  taskModel
+    .find({ $and: [{ user: tokenId }, { isdeleted: false }] })
     .then((result) => {
-      taskModel
-        .find({$and: [{user: id}, {isdeleted: false}] })
-        .then((result) => {
-          if (result) res.status(200).json(result);
-          else res.status(400).json("this user not has any tasks");
-        })
-        .catch((err) => {
-          res.status(400).send(err);
-        });
+      if (result) res.status(200).json(result);
+      else res.status(400).json("this user not has any tasks");
     })
     .catch((err) => {
-      res.status(400).json("User not found");
+      res.status(400).send(err);
     });
 };
 
 const getTaskById = (req, res) => {
-    const { userId, taskId } = req.body;
-    userModel
-      .findById({ _id: userId })
-      .then((result) => {
-        taskModel
-          .find({$and: [{ _id: taskId},{ user: userId}, {isdeleted: false}] })
-          .then((result) => {
-            if (result) res.status(200).json(result);
-            else res.status(400).send("user does not has this task");
-          })
-          .catch((err) => {
-            res.status(400).send("user does not has this task");
-          });
-      })
-      .catch((err) => {
-        res.status(400).json("User not found");
-      });
-  };
+  const tokenId=req.token.id;
+  const {  taskId } = req.body;
+  taskModel
+    .find({ $and: [{ _id: taskId }, { user: tokenId }, { isdeleted: false }] })
+    .then((result) => {
+      if (result) res.status(200).json(result);
+      else res.status(400).send("user does not has this task");
+    })
+    .catch((err) => {
+      res.status(400).send("user does not has this task");
+    });
+};
 
-  const deleteAllTask = (req, res) => {
-    const { id } = req.body;
-    userModel
-      .findById({ _id: id })
-      .then((result) => {
-        taskModel
-          .find({$and:[ {user: id}, {isdeleted: false}] })
-          .then(async (result) => {
-            if (result) {
-              let doc = await taskModel.updateMany({ user: id }, { isdeleted: true });
-  
-              res.status(200).json(doc);
-            } else res.status(400).send("user does not has this task");
-          })
-          .catch((err) => {
-            res.status(400).send(err);
-          });
-      })
-      .catch((err) => {
-        res.status(400).json("User not found");
-      });
-  };
+const deleteAllTask = (req, res) => {
+  const tokenId=req.token.id;
+  // const { userId } = req.body;
+  taskModel
+    .find({ $and: [{ user:tokenId }, { isdeleted: false }] })
+    .then(async (result) => {
+      if (result) {
+        let doc = await taskModel.updateMany(
+          { user: userId },
+          { isdeleted: true }
+        );
 
-  const updateTask = (req, res) => {
-    const { userId, taskId, taskName } = req.body;
-  
-    if (userId == undefined || taskId == undefined || taskName == undefined)
-      return res.status(400).send("some data are missing");
-    taskModel
-      .findOne({$and: [ {_id: taskId}, {user: userId}, {isdeleted: false}] })
-      .then(async (result) => {
-        if (result) {
-          let doc = await taskModel.findOneAndUpdate(
-            { _id: taskId },
-            { name: taskName },
-            {
-              new: true,
-            }
-          );
-  
-          res.status(200).json(doc);
-        } else res.status(400).send("user does not has this task");
-      })
-      .catch((err) => {
-        res.status(400).send("user does not has this task");
-      });
-  };
+        res.status(200).json(doc);
+      } else res.status(400).send("user does not has this task");
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+};
 
-  const createTask = (req, res) => {
-    const { name, user } = req.body;
-  
-    userModel
-      .findById({ _id: user })
-      .then((result) => {
-        if (result) {
-          const newTask = new taskModel({
-            name,
-            user,
-          });
-  
-          newTask
-            .save()
-            .then((result) => {
-              res.status(200).json(result);
-            })
-            .catch((err) => {
-              res.status(400).send(err);
-            });
-        } else res.status(400).json("User not found");
-      })
-      .catch((err) => {
-        res.status(400).json("User not found");
-      });
-  };
+const updateTask = (req, res) => {
+  const tokenId=req.token.id;
+  const { taskId, taskName } = req.body;
 
-  const deleteTaskById = (req, res) => {
-    const { userId, taskId } = req.body;
-  
-    userModel
-      .findById({ _id: userId })
-      .then((result) => {
-        taskModel
-          .findOne({$and: [{_id: taskId}, {user: userId}] })
-          .then(async (result) => {
-            if (result) {
-              let doc = await taskModel.findOneAndUpdate(
-                { _id: taskId },
-                {
-                    isdeleted: true,
-                },
-                {
-                  new: true,
-                }
-              );
-  
-              res.status(200).json(doc);
-            } else res.status(400).send("user does not has this task");
-          })
-          .catch((err) => {
-            res.status(400).send("user does not has this task");
-          });
-      })
-      .catch((err) => {
-        res.status(400).json("User not found");
-      });
-  };
+  taskModel
+    .findOne({
+      $and: [{ _id: taskId }, { user: tokenId }, { isdeleted: false }],
+    })
+    .then(async (result) => {
+      if (result) {
+        let doc = await taskModel.findOneAndUpdate(
+          { _id: taskId },
+          { name: taskName },
+          {
+            new: true,
+          }
+        );
 
+        res.status(200).json(doc);
+      } else res.status(400).send("user does not has this task");
+    })
+    .catch((err) => {
+      res.status(400).send("user does not has this task");
+    });
+};
 
+const createTask = (req, res) => {
+  const tokenId=req.token.id;
+  const { name } = req.body;
 
+  const newTask = new taskModel({
+    name,
+    user:tokenId,
+  });
 
-module.exports = { getTask,getTaskById,deleteAllTask,updateTask,createTask,deleteTaskById };
+  newTask
+    .save()
+    .then((result) => {
+      res.status(200).json(result);
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+};
 
+const deleteTaskById = (req, res) => {
+  const tokenId=req.token.id;
+  const {  taskId } = req.body;
+      taskModel
+        .findOne({ $and: [{ _id: taskId }, { user: tokenId }] })
+        .then(async (result) => {
+          if (result) {
+            let doc = await taskModel.findOneAndUpdate(
+              { _id: taskId },
+              {
+                isdeleted: true,
+              },
+              {
+                new: true,
+              }
+            );
 
+            res.status(200).json(doc);
+          } else res.status(400).send("user does not has this task");
+        })
+        .catch((err) => {
+          res.status(400).send("user does not has this task");
+        });
+    
+};
 
+const getAllTaskByAdmin = (req, res) => {
 
-  
-  
+  taskModel
+    .find({ isdeleted: false })
+    .then((result) => {
+      if (result) res.status(200).json(result);
+      else res.status(400).json("no tasks");
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+};
+
+const deleteTaskByAdmin = (req, res) => {
+
+  const {  taskId } = req.body;
+      taskModel
+        .findOne({ _id: taskId })
+        .then(async (result) => {
+          if (result) {
+            let doc = await taskModel.findOneAndUpdate(
+              { _id: taskId },
+              {
+                isdeleted: true,
+              },
+              {
+                new: true,
+              }
+            );
+
+            res.status(200).json(doc);
+          } else res.status(400).send("user does not has this task");
+        })
+        .catch((err) => {
+          res.status(400).send("user does not has this task");
+        });
+    
+};
+
+module.exports = {
+  getTask,
+  getTaskById,
+  deleteAllTask,
+  updateTask,
+  createTask,
+  deleteTaskById,
+  getAllTaskByAdmin,
+  deleteTaskByAdmin
+};

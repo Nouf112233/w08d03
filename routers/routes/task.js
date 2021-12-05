@@ -1,13 +1,17 @@
 const express = require("express");
-const {getTask,getTaskById,deleteAllTask,updateTask,createTask,deleteTaskById } = require("./../controllers/task");
+const {getTask,getTaskById,deleteAllTask,updateTask,createTask,deleteTaskById ,getAllTaskByAdmin,deleteTaskByAdmin} = require("./../controllers/task");
 const taskRouter = express.Router();
+const authontication=require("./../middlewares/authontication");
+const {adminAuthorization}=require("./../middlewares/authorization");
 
-taskRouter.post("/tasks", getTask);
-taskRouter.post("/task", getTaskById);
-taskRouter.delete("/tasks", deleteAllTask);
-taskRouter.put("/task", updateTask);
-taskRouter.post("/create", createTask);
-taskRouter.delete("/task", deleteTaskById);
+taskRouter.get("/tasks",authontication, getTask);
+taskRouter.post("/task",authontication, getTaskById);
+taskRouter.delete("/tasks",authontication, deleteAllTask);
+taskRouter.put("/task",authontication, updateTask);
+taskRouter.post("/create",authontication, createTask);
+taskRouter.delete("/task",authontication, deleteTaskById);
+taskRouter.get("/alltasks",authontication,adminAuthorization, getAllTaskByAdmin);
+taskRouter.delete("/taskadmin",authontication,adminAuthorization, deleteTaskByAdmin);
 
 
 
