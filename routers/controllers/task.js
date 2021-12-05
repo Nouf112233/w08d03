@@ -2,7 +2,6 @@ const taskModel = require("./../../db/models/task");
 const userModel = require("./../../db/models/user");
 
 const getTask = (req, res) => {
-  // const { userId } = req.body;
   const tokenId=req.token.id;
 
   taskModel
@@ -32,7 +31,7 @@ const getTaskById = (req, res) => {
 
 const deleteAllTask = (req, res) => {
   const tokenId=req.token.id;
-  // const { userId } = req.body;
+ 
   taskModel
     .find({ $and: [{ user:tokenId }, { isdeleted: false }] })
     .then(async (result) => {

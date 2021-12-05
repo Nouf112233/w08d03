@@ -5,6 +5,6 @@ const authontication=require("./../middlewares/authontication");
 const {adminAuthorization,userAuthorization}=require("./../middlewares/authorization");
 
 roleRouter.post("/",authontication,adminAuthorization,addRole);
-roleRouter.get("/",authontication,adminAuthorization, getRoles);
+roleRouter.get("/",authontication, getRoles);
 
 module.exports = roleRouter;
