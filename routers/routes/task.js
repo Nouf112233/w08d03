@@ -9,9 +9,9 @@ taskRouter.post("/task",authontication, getTaskById);
 taskRouter.delete("/tasks",authontication, deleteAllTask);
 taskRouter.put("/task",authontication, updateTask);
 taskRouter.post("/create",authontication, createTask);
-taskRouter.delete("/task",authontication, deleteTaskById);
+taskRouter.delete("/task/:taskId",authontication, deleteTaskById);
 taskRouter.get("/alltasks",authontication,adminAuthorization, getAllTaskByAdmin);
-taskRouter.delete("/taskadmin",authontication,adminAuthorization, deleteTaskByAdmin);
+taskRouter.delete("/taskadmin/:taskId",authontication,adminAuthorization, deleteTaskByAdmin);
 
 
 

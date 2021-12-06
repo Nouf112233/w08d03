@@ -96,7 +96,7 @@ const createTask = (req, res) => {
 
 const deleteTaskById = (req, res) => {
   const tokenId=req.token.id;
-  const {  taskId } = req.body;
+  const {  taskId } = req.params;
       taskModel
         .findOne({ $and: [{ _id: taskId }, { user: tokenId }] })
         .then(async (result) => {
@@ -135,7 +135,7 @@ const getAllTaskByAdmin = (req, res) => {
 
 const deleteTaskByAdmin = (req, res) => {
 
-  const {  taskId } = req.body;
+  const {  taskId } = req.params;
       taskModel
         .findOne({ _id: taskId })
         .then(async (result) => {

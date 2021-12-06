@@ -42,7 +42,7 @@ const login = (req, res) => {
               role: result.role,
               id:result._id
             };
-            const options = { expiresIn: "60m" };
+            const options = { expiresIn: "180m" };
             const token = await jwt.sign(payload, secret, options);
             res.status(200).json({ result, token });
           } else {

@@ -29,4 +29,19 @@ const getRoles = (req, res) =>{
     });
   };
 
-module.exports = { addRole,getRoles };
+  const getRole = (req, res) =>{
+    const tokenRole=req.token.role;
+    roleModel
+    .findOne({_id:tokenRole})
+    .then((result) => {
+        res.status(201).json(result.role);
+      
+    })
+    .catch((err) => {
+        res.status(400).json(err);
+      
+    });
+  };
+ 
+
+module.exports = { addRole,getRoles,getRole };
