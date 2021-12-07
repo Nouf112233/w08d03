@@ -159,6 +159,20 @@ const deleteTaskByAdmin = (req, res) => {
     
 };
 
+const getTaskByAdmin = (req, res) => {
+  const {userId}=req.params;
+
+  taskModel
+    .find({ $and: [{ user: userId }, { isdeleted: false }] })
+    .then((result) => {
+      if (result) res.status(200).json(result);
+      else res.status(400).json("this user not has any tasks");
+    })
+    .catch((err) => {
+      res.status(400).send(err);
+    });
+};
+
 module.exports = {
   getTask,
   getTaskById,
@@ -167,5 +181,6 @@ module.exports = {
   createTask,
   deleteTaskById,
   getAllTaskByAdmin,
-  deleteTaskByAdmin
+  deleteTaskByAdmin,
+  getTaskByAdmin
 };
