@@ -30,7 +30,9 @@
       .get all users
       .delete user by id
 
-      digram
+# digram
+
+  ![Untitled%20Diagram.drawio img](https://github.com/Nouf112233/w08d03/blob/main/Untitled%20Diagram.drawio.png)
 
 
 
