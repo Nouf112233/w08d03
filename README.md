@@ -34,5 +34,9 @@
 
   ![Untitled%20Diagram.drawio img](https://github.com/Nouf112233/w08d03/blob/main/Untitled%20Diagram.drawio.png)
 
+# UML
+![uml-w08d03.drawio img](https://github.com/Nouf112233/w08d03/blob/main/uml-w08d03.drawio.png)
+
+
 
 
